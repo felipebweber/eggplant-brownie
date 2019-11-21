@@ -100,41 +100,35 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
     }
     
-    // MARK: - IBActions
-    @IBAction func adicionar(_ sender: Any) {
-        
-        
-        //Assim é uma forma de tratar possiveis erros, forma segura
-//        if let nomeDaRefeicao = nomeTextField?.text, let felicidadeDaRefeicao = felicidadeTextField?.text{
-//            let nome = nomeDaRefeicao
-//            if let felicidade = Int(felicidadeDaRefeicao){
-//                let refeicao = Refeicao(nome: nome, felicidade: felicidade)
-//                print("comi \(String(describing: refeicao.nome)) e fiquei com felicidade: \(String(refeicao.felicidade))")
-//            }
-//        }else{
-//            print("Erro ao criar a refeição :(")
-//        }
-        
+    func recuperaRefeicaoDoFormulario() -> Refeicao?{
         //Essa é outra forma de tratar possiveis erros, forma segura
         guard let nomeDaRefeicao = nomeTextField?.text else {
-            return
+//            Alerta(controller: self).exibe(mensagem: "Erro ao ler campo nome.")
+            return nil
         }
         
         guard let felicidadeDaRefeicao = felicidadeTextField?.text, let felicidade = Int(felicidadeDaRefeicao) else {
-            return
+//            Alerta(controller: self).exibe(mensagem: "Erro ao ler campo felicidade.")
+            return nil
         }
         
         let refeicao = Refeicao(nome: nomeDaRefeicao, felicidade: felicidade, itens: itensSelecionados)
         
-//        refeicao.itens = itensSelecionados
+        return refeicao
+    }
+    
+    // MARK: - IBActions
+    @IBAction func adicionar(_ sender: Any) {
         
-        print("comi \(String(describing: refeicao.nome)) e fiquei com felicidade: \(String(refeicao.felicidade))")
+        if let refeicao = recuperaRefeicaoDoFormulario(){
+            delegate?.add(refeicao)
+            //quando usado faz com o view controller saia, desapareça, eh tirado da pilha
+            //volta para tela anterior
+            navigationController?.popViewController(animated: true)
+        }else{
+            Alerta(controller: self).exibe(mensagem: "Erro ao ler dado do formulário")
+        }
         
-        delegate?.add(refeicao)
-        
-        //quando usado faz com o view controller saia, desapareça, eh tirado da pilha
-        //volta para tela anterior
-        navigationController?.popViewController(animated: true)
     }
 
 
