@@ -65,8 +65,8 @@
 			isa = PBXGroup;
 			children = (
 				55BDF03A237AE1F70009BF6A /* ViewController.swift */,
-				5595830D2384932600F53A25 /* AdicionarItensViewController.swift */,
 				5538C1EA238347FE004E5D79 /* RefeicoesTableViewController.swift */,
+				5595830D2384932600F53A25 /* AdicionarItensViewController.swift */,
 				55564EB82386D63900AEEF10 /* RemoveRefeicaoViewController.swift */,
 			);
 			path = Controllers;
