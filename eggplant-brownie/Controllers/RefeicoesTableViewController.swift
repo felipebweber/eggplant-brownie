@@ -11,28 +11,11 @@ import UIKit
 
 class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDelegate{
     
-    var refeicoes = [Refeicao (nome: "Macarrão", felicidade: 4, itens: []), Refeicao (nome: "Pizza", felicidade: 5), Refeicao (nome: "Comida Japonesa", felicidade: 3, itens: []), Refeicao(nome: "Picanha Express", felicidade: 5), Refeicao(nome: "Sera", felicidade: 4, itens: [Item(nome: "OPa", calorias: 100)])]
+//    var refeicoes = [Refeicao (nome: "Macarrão", felicidade: 4, itens: []), Refeicao (nome: "Pizza", felicidade: 5), Refeicao (nome: "Comida Japonesa", felicidade: 3, itens: []), Refeicao(nome: "Picanha Express", felicidade: 5), Refeicao(nome: "Sera", felicidade: 4, itens: [Item(nome: "OPa", calorias: 100)])]
+    var refeicoes: [Refeicao] = []
     
     override func viewDidLoad() {
-        guard let caminho = recuperaCaminho() else {return}
-        
-        do{
-            let dados = try Data(contentsOf: caminho)
-            guard let refeicoesSalvas = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(dados) as? Array<Refeicao> else {return}
-            refeicoes = refeicoesSalvas
-            
-        }catch{
-            print(error.localizedDescription)
-        }
-        
-    }
-    
-    func recuperaCaminho() -> URL?{
-        guard let diretorio = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
-        
-        let caminho = diretorio.appendingPathComponent("refeicao")
-        
-        return caminho
+        refeicoes = RefeicaoDao().recupera()
     }
     
     
@@ -79,15 +62,7 @@ class RefeicoesTableViewController: UITableViewController, AdicionaRefeicaoDeleg
     func add(_ refeicao: Refeicao){
         refeicoes.append(refeicao)
          tableView.reloadData()
-        guard let caminho = recuperaCaminho() else {return}
-        
-        //salvar os dados
-        do{
-            let dados = try NSKeyedArchiver.archivedData(withRootObject: refeicoes, requiringSecureCoding: false)
-            try dados.write(to: caminho)
-        }catch{ 
-            print(error.localizedDescription)
-        }
+        RefeicaoDao().save(refeicoes)
         
     }
     
